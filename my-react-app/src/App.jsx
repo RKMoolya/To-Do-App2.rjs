@@ -84,7 +84,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-300 via-pink-200 to-yellow-200 p-6">
+    <div className="min-w-screen bg-gradient-to-r from-purple-300 via-pink-200 to-yellow-200 p-6">
       <h1 className="text-5xl font-extrabold text-center text-gray-800 mb-6" style={{ fontFamily: "Georgia" }}>To Do App</h1>
 
       <Navbar view={view} setView={setView} />
