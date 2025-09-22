@@ -1,0 +1,5 @@
+[
+  { "title": "Buy groceries", "completed": false },
+  { "title": "Finish ToDoApp project", "completed": true },
+  { "title": "Call mentor", "completed": false }
+]
