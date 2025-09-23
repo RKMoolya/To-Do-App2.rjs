@@ -13,36 +13,36 @@ export default function App() {
   // Fetch tasks from backend
   useEffect(() => {
     fetch("http://localhost:5000/tasks")
-      .then(res => res.json())
-      .then(data => setTodos(data));
+      .then((res) => res.json())
+      .then((data) => setTodos(data));
   }, []);
 
   const addOrEditTodo = () => {
     if (input.trim() === "") return;
 
     if (editingId !== null) {
-      // Update task on backend
       fetch(`http://localhost:5000/tasks/${editingId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: input }),
       })
-        .then(res => res.json())
-        .then(updatedTask => {
-          setTodos(prev => prev.map(t => t._id === editingId ? updatedTask : t));
+        .then((res) => res.json())
+        .then((updatedTask) => {
+          setTodos((prev) =>
+            prev.map((t) => (t._id === editingId ? updatedTask : t))
+          );
           setEditingId(null);
           setInput("");
         });
     } else {
-      // Add new task to backend
       fetch("http://localhost:5000/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: input }),
       })
-        .then(res => res.json())
-        .then(newTask => {
-          setTodos(prev => [...prev, newTask]);
+        .then((res) => res.json())
+        .then((newTask) => {
+          setTodos((prev) => [...prev, newTask]);
           setInput("");
         });
     }
@@ -53,43 +53,54 @@ export default function App() {
   };
 
   const deleteTodo = (id) => {
-    fetch(`http://localhost:5000/tasks/${id}`, { method: "DELETE" })
-      .then(() => setTodos(prev => prev.filter(t => t._id !== id)));
+    fetch(`http://localhost:5000/tasks/${id}`, { method: "DELETE" }).then(() =>
+      setTodos((prev) => prev.filter((t) => t._id !== id))
+    );
   };
 
   const markComplete = (id) => {
-    const task = todos.find(t => t._id === id);
+    const task = todos.find((t) => t._id === id);
     fetch(`http://localhost:5000/tasks/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ completed: true }), // mark as complete
+      body: JSON.stringify({ completed: true }),
     })
-      .then(res => res.json())
-      .then(updatedTask => {
-        setTodos(prev => prev.map(t => t._id === id ? updatedTask : t));
+      .then((res) => res.json())
+      .then((updatedTask) => {
+        setTodos((prev) => prev.map((t) => (t._id === id ? updatedTask : t)));
       });
   };
 
   const editTodo = (id) => {
-    const t = todos.find(t => t._id === id);
+    const t = todos.find((t) => t._id === id);
     setInput(t.title);
     setEditingId(id);
   };
 
   const clearAllTodos = () => {
     if (!window.confirm("Clear all tasks?")) return;
-    // Delete all tasks from backend
-    Promise.all(todos.map(t => fetch(`http://localhost:5000/tasks/${t._id}`, { method: "DELETE" })))
-      .then(() => setTodos([]));
+    Promise.all(
+      todos.map((t) =>
+        fetch(`http://localhost:5000/tasks/${t._id}`, { method: "DELETE" })
+      )
+    ).then(() => setTodos([]));
   };
 
   return (
-    <div className="min-w-screen bg-gradient-to-r from-purple-300 via-pink-200 to-yellow-200 p-6">
-      <h1 className="text-5xl font-extrabold text-center text-gray-800 mb-6" style={{ fontFamily: "Georgia" }}>To Do App</h1>
+ <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-r from-purple-300 via-pink-200 to-yellow-200 
+                    p-4 sm:p-6 lg:p-10 flex flex-col">      {/* Title */}
+      <h1
+        className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center text-gray-800 mb-6"
+        style={{ fontFamily: "Georgia" }}
+      >
+        To Do App
+      </h1>
 
+      {/* Navbar */}
       <Navbar view={view} setView={setView} />
 
-      <div className="mx-auto w-2/3">
+      {/* Main content wrapper */}
+      <div className="flex-grow mx-auto w-full max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-4xl">
         {view === "all" && (
           <TodoInput
             input={input}
